@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Streaming</title>
+    <link rel="stylesheet" type="text/css" href="../static/pure-min.css" />
+    <link rel="stylesheet" type="text/css" href="../static/app.css" />
+</head>
+<body>
+
+<div id="main">
+
+    <div class="header">
+        <h1>Streaming</h1>
+    </div>
+
+    <br />
+
+    <div class="content">
+
+
+<form class="pure-form" method="POST" action="{{ url_for('index') }}">
+<div class="pure-g-r">
+
+    <div class="pure-u-1-4">
+    <fieldset>
+            <legend>Resolution</legend>
+    {% for res in resolutions %}
+        <label for="resolution_{{res.id}}" class="pure-radio">
+            <input id="resolution_{{res.id}}" name="resolution" type="radio" value="{{ res.id }}"
+                {% if res.id == config.resolution.id %} checked {% endif %}
+            >
+            {{ res.name }}
+        </label>
+    {% endfor %}
+    </fieldset>
+
+
+    <fieldset>
+        <legend>Grayscale?</legend>
+        <label for="grayscale" class="checkbox">
+            <input id="grayscale" name="grayscale" type="checkbox" value="1"
+            {% if config.grayscale %} checked {% endif %}
+            />
+            Yes
+        </label>
+    </fieldset>
+
+    <fieldset>
+        <legend>Add time?</legend>
+        <label for="time" class="checkbox">
+            <input id="time" name="time" type="checkbox" value="1"
+            {% if config.insert_time %} checked {% endif %}
+            />
+            Yes
+        </label>
+    </fieldset>
+
+    <button type="submit" class="pure-button pure-button-primary">Apply</button>
+<hr />
+    <a href="?clear=1"  class="button-warning pure-button pure-button-active">Clear preferences</a>
+
+
+    </div>
+    <div class="pure-u-3-4">
+         <img src="0{{ url_for('streamer.stream_cam') }}" alt="Steaming cam"
+              width="{{ config.resolution.values[0] }}"
+              height="{{ config.resolution.values[1] }}"
+                 />
+    </div>
+</div>
+
+</form>
+
+
+
+</div>
+</div>
+</body>
+</html>
