@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+{% extends "layout.html" %}
+
+{% block title %}Streaming{% endblock %}
+
+
+{% block content %}
+<div class="m-box">
+    <img src="{{ url_for('.stream_cam') }}" alt="Steaming cam"
+      width="{{ config.resolution.values[0] }}"
+      height="{{ config.resolution.values[1] }}" />
+</div>
+{% endblock %}

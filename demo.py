@@ -26,4 +26,4 @@ def test_redirect():
     return redirect( url_for('streamer.show_main_page') )
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True)
+    app.run(host='0.0.0.0', port=3000, debug=True)

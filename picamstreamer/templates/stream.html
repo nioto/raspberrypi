@@ -1,13 +1,63 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <title>Streaming</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='pure-min.css') }}" />
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='app.css') }}" />
-</head>
-<body>
+{% extends "layout.html" %}
 
- <img src="{{ url_for('.stream_cam') }}" />
- 
-</body>
-</html>
+
+{% macro input_checked(value) -%} {%
+    if value %} checked {% endif
+%}{%- endmacro %}
+{% macro checkbox_resolution(resolution, selected) -%}
+    <label for="resolution_{{resolution.id}}" class="pure-radio">
+      <input id="resolution_{{resolution.id}}" name="resolution" type="radio" value="{{ resolution.id }}" {{ input_checked(resolution.id == selected.id ) }}/> {{ resolution.name }}
+    </label>
+{%- endmacro %}
+
+{% block title %}Streaming{% endblock %}
+
+
+{% block content %}
+
+
+<form class="pure-form" method="POST" action="{{ url_for('.show_main_page') }}">
+<div class="pure-g-r">
+
+    <div class="pure-u-1-4">
+        <div class="m-box">
+            <fieldset>
+                <legend>Resolution</legend>
+                {% for res in resolutions %}
+                    {{ checkbox_resolution( res, config.resolution ) }}
+                {% endfor %}
+            </fieldset>
+            <fieldset>
+                <legend>Grayscale?</legend>
+                <label for="grayscale" class="checkbox">
+                    <input id="grayscale" name="grayscale" type="checkbox" value="1" {{ input_checked(config.grayscale) }} /> Yes
+                </label>
+            </fieldset>
+            <fieldset>
+                <legend>Add time?</legend>
+                <label for="time" class="checkbox">
+                    <input id="time" name="time" type="checkbox" value="1" {{ input_checked(config.insert_time) }} /> Yes
+                </label>
+            </fieldset>
+
+            <button type="submit" class="pure-button pure-button-primary">Apply</button>
+
+            <hr />
+
+            <a href="?clear=1"  class="button-warning pure-button pure-button-active">Clear preferences</a>
+        </div>
+    </div>
+    <div class="pure-u-3-4">
+        <div class="m-box">
+         <img src="{{ url_for('.stream_cam') }}" alt="Steaming cam"
+              width="{{ config.resolution.values[0] }}"
+              height="{{ config.resolution.values[1] }}"
+                 />
+    </div>
+    </div>
+</div>
+
+</form>
+
+{% endblock %}

@@ -1,10 +1,10 @@
 body {
   color: #777777;
-  line-height: 1.6;
+  /* line-height: 1.6;*/
 }
 .header{
   margin: 0 auto;
-  max-width: 900px;
+  max-width: 768px;
   padding: 1em;
   text-align: center;
   border-bottom: 1px solid #EEEEEE;
@@ -12,7 +12,7 @@ body {
 .header h1 {
   font-size: 300%;
   font-weight: 100;
- margin: 0;
+  margin: 0;
 }
 h1, h2, h3, h4, h5, h6 {
   color: #4B4B4B;
@@ -35,8 +35,6 @@ h1, h2, h3, h4, h5, h6 {
     border-radius: 4px;
     text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
 }
-.pure-g-r > div {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
+.m-box {
+    padding: 1em;
 }

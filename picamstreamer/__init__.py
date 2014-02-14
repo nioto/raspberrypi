@@ -27,24 +27,29 @@ RESOLUTIONS = [Resolution(1, (320, 240)), Resolution(2, (640, 480)), Resolution(
 
 CONFIG_KEY_SESSION = "streamer.config_key"
 
-
 class Config(object):
     resolution = RESOLUTIONS[0]
     grayscale = False
     insert_time = True
     quality = 70
 
-    def __init__(self, http_request):
-        index = int(http_request.values.get('resolution', 1))
-        self.resolution = RESOLUTIONS[index-1]
-        if http_request.values.get('grayscale', -1) >= 0:
-            self.grayscale = True
+    def __init__(self, http_request=None, resolution=RESOLUTIONS[1], grayscale=False, time=False, quality=70):
+        if http_request is not None:
+            index = int(http_request.values.get('resolution', 1))
+            self.resolution = RESOLUTIONS[index-1]
+            if http_request.values.get('grayscale', -1) >= 0:
+                self.grayscale = True
+            else:
+                self.grayscale = False
+            if http_request.values.get('time', -1) >= 0:
+                self.insert_time = True
+            else:
+                self.insert_time = False
         else:
-            self.grayscale = False
-        if http_request.values.get('time', -1) >= 0:
-            self.insert_time = True
-        else:
-            self.insert_time = False
+            self.resolution = resolution
+            self.grayscale = grayscale
+            self.time = time
+            self.quality = time
 
     def __str__(self):
         return "Config (%s, grayscale=%s)" % (str(self.resolution), str(self.grayscale))
@@ -53,7 +58,7 @@ class Config(object):
         self.resolution = RESOLUTIONS[0]
         self.grayscale = False
         self.insert_time = True
-
+        self.quality = 70
 
     @staticmethod
     def get_config_from_req(r):
@@ -68,11 +73,21 @@ class Config(object):
     def get_config_from_session():
         return session[CONFIG_KEY_SESSION]
 
+    @staticmethod
+    def set_default_config():
+        session[CONFIG_KEY_SESSION] = CONFIG_DEFAULT
+        return session[CONFIG_KEY_SESSION]
 
+
+CONFIG_DEFAULT = Config(None)
 
 @streamer.route('/stream.html', methods=['GET', 'POST'])
 def show_main_page():
     return render_template('stream.html', resolutions=RESOLUTIONS, config=Config.get_config_from_req(request))
+
+@streamer.route('/simple.html', methods=['GET'])
+def show_simple_page():
+    return render_template('simple.html', config=Config.set_default_config())
 
 
 @streamer.route('/stream.mjpg')
