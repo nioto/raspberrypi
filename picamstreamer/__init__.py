@@ -49,7 +49,7 @@ class Config(object):
             self.resolution = resolution
             self.grayscale = grayscale
             self.time = time
-            self.quality = time
+            self.quality = quality
 
     def __str__(self):
         return "Config (%s, grayscale=%s)" % (str(self.resolution), str(self.grayscale))
@@ -120,7 +120,6 @@ except IOError:
 
 
 def get_image(config):
-    imgstr = None
     try:
         import picamera.PiCamera as PiCamera
         imgstr = get_image_from_picam(PiCamera(), config)
