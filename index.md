@@ -3,14 +3,26 @@ layout: index
 title: Wink.JS
 ---
 
-# Wink.JS Api Client
+# PiCamStreamer
 
-Under [Apache license](https://raw.github.com/nioto/wink.js/master/LICENSE)
+Create a mjpeg server for you Pi Camera module
 
-If you're using [Wink](http://wink.apache.org) for your REST API, you can now easily get the Javascript Code to call your Rest resources.
+Defines a [Blueprint](http://flask.pocoo.org/docs/blueprints/) to use under the micro web framework [Flask](http://flask.pocoo.org/) .
 
-####Don't use the API in Production mode,  <a href="./install.html">generate</a> your client code in DEV and put it as Javascript file into production.
+This project uses the [PiCamera interface](https://github.com/waveform80/picamera/).
 
-Based on the [RestEasy-JSAPI](http://docs.jboss.org/resteasy/2.0.0.GA/userguide/html/AJAX_Client.html)
+Based on the code from [Simple mjpeg server](https://gist.github.com/n3wtron/4624820)
 
-Download latest version : [winkjs-0.2.jar](https://sourceforge.net/projects/winkjs/files/v0.2/)
+Their 2 modes:
+* Simple : only streaming
+* With controls : allow you to change resolution, view strem on grayscale, add timestamp on image, change quality of image (need PIL library) 
+
+Install dependancies
+```bash
+$ sudo apt-get install python-picamera
+$ sudo apt-get install python-flask
+```
+
+Under [BSD license](https://raw.github.com/nioto/PiCamStreamer/master/LICENSE)
+
+
