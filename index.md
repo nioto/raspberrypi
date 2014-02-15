@@ -13,7 +13,8 @@ This project uses the [PiCamera interface](https://github.com/waveform80/picamer
 
 Based on the code from [Simple mjpeg server](https://gist.github.com/n3wtron/4624820)
 
-Their 2 modes:
+#### There are 2 modes:
+
 1. Simple : only streaming
 2. With controls : allow you to change resolution, view strem on grayscale, add timestamp on image, change quality of image (need PIL library) 
 
