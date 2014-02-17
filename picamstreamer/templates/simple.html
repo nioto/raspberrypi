@@ -5,9 +5,15 @@
 
 
 {% block content %}
-<div class="m-box">
-    <img src="{{ url_for('.stream_cam') }}" alt="Steaming cam"
-      width="{{ config.resolution.values[0] }}"
-      height="{{ config.resolution.values[1] }}" />
+<div class="pure-g-r">
+    <div class="pure-u-1-5"></div>
+    <div class="pure-u-3-5 center">
+        <div class="m-box">
+            <img src="{{ url_for('.stream_cam') }}" alt="Steaming cam"
+                 width="{{ config.resolution.values[0] }}"
+                 height="{{ config.resolution.values[1] }}" />
+        </div>
+    </div>
+    <div class="pure-u-1-5"></div>
 </div>
 {% endblock %}

@@ -17,7 +17,7 @@
 {% block content %}
 
 
-<form class="pure-form" method="POST" action="{{ url_for('.show_main_page') }}">
+<form class="pure-form" method="POST" action="{{ url_for('.home') }}">
 <div class="pure-g-r">
 
     <div class="pure-u-1-4">
@@ -37,7 +37,7 @@
             <fieldset>
                 <legend>Add time?</legend>
                 <label for="time" class="checkbox">
-                    <input id="time" name="time" type="checkbox" value="1" {{ input_checked(config.insert_time) }} /> Yes
+                    <input id="time" name="showtime" type="checkbox" value="1" {{ input_checked(config.showtime) }} /> Yes
                 </label>
             </fieldset>
 

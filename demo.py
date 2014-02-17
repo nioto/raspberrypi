@@ -16,14 +16,9 @@ app.config.update(
     SESSION_COOKIE_NAME = "my_cookie"
 )
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/', methods=['GET'])
 def index():
-    return render_template("test.html", resolutions=RESOLUTIONS, config=Config.get_config_from_req(request))
-
-
-@app.route('/st')
-def test_redirect():
-    return redirect( url_for('streamer.show_main_page') )
+    return redirect( url_for('streamer.home') )
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=3000, debug=True)
