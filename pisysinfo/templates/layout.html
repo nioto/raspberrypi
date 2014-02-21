@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='pure-min.css')}}" />
+    <link rel="stylesheet" href="{{ url_for('static',filename='app.css')}}" />
+</head>
+<body>
+
+
+<div id="main">
+    <div class="header">
+        <h1>{{ self.title() }}</h1>
+    </div>
+
+    <br />
+
+    <div class="content">
+        {% block content %}{% endblock %}
+    </div>
+</div>
+
+</body>
+</html>
