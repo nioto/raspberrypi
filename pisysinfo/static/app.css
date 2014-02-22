@@ -45,3 +45,10 @@ h1, h2, h3, h4, h5, h6 {
 .button-success {
   background: rgb(28, 184, 65); /* this is a green */
 }
+
+.header {
+  background-color: #AAAAAA
+}
+table > caption {
+  background-color: #212933
+}

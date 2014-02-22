@@ -7,50 +7,65 @@
 %}{%- endmacro %}
 
 
-{% block title %}Informations{% endblock %}
+{% block title %}Computer informations{% endblock %}
 
 {% block content %}
 <div class="pure-g-r">
-    <div class="pure-u-1-3">
-        <p><h6>Hostname : </h6> {{ data.hostname }}</p>
-        <p><h6>Procedd Up depuis : </h6> {{ data.prog_up_since }}</p>
-        <p><h6>OS Up depuis : </h6> {{ data.host_up_since }}</p>
-        <p><h6>OS Name : </h6> {{ data.osname }}</p>
-        <p><h6>Mem : </h6> {{data.memtotal}} {{ checkpercent(data.mempercent) }}</p>
-    </div>
-    <div class="pure-u-1-3">
-        <p><h6>IPs : </h6>
-        <ul>
-        {% for ip in data.ips %}
-        <li>{{ ip }}</li>
-                {% endfor %}
-        </ul>
+    <div class="pure-u-1-2">
+        <h5>OS informations</h5>
+        <p>
+            <strong>OS Name : </strong> {{ data.osname }}
+            <br>
+            <strong>Uptime : </strong> {{ data.host_up_since }}
         </p>
     </div>
-    <div class="pure-u-1-3">
-        <div class="m-box">
-          <h6>DD : </h6>
+
+    <div class="pure-u-1-2">
+        <h5>Network informations</h5>
+        <p>
+            <strong>Hostname : </strong> {{ data.hostname }}
+            <br>
+            <strong>IPs : </strong>
+            <blockquote>
+                {% for ip in data.ips %}
+                    {{ ip }}<br>
+                {% endfor %}
+            </blockquote>
+        </p>
+    </div>
+    <div class="pure-u">
+        <h5>System resources</h5>
+        <p>
+            <strong>Process up since : </strong> {{ data.prog_up_since }}
+            <br>
+            <strong>Memory usage: </strong> {{ checkpercent(data.mempercent) }} of {{data.memtotal}}
+            <br>
+        </p>
+        <p>
+          <h5>Harddrive : </h5>
           <table class="pure-table pure-table-horizontal">
               <thead>
                   <tr>
-                      <th>mounting point</th>
-                      <th>fstype</th>
+                      <th>Mounting point</th>
+                      <th>Fstype</th>
                       <th>Space</th>
                       <th>Used</th>
+                      <th>Free</th>
                   </tr>
               </thead>
-        <tbody>
-        {% for pt in data.partitions %}
-        <tr>
-            <td>{{ pt.mountpoint }}</td>
-            <td>{{ pt.fstype }}</td>
-            <td>{{ pt.ddtotal }}</td>
-            <td>{{ checkpercent(pt.ddpercent) }}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-        </table>
-        </div>
+              <tbody>
+                {% for pt in data.partitions %}
+                <tr>
+                    <td>{{ pt.mountpoint }}</td>
+                    <td>{{ pt.fstype }}</td>
+                    <td>{{ pt.ddtotal }}</td>
+                    <td>{{ checkpercent(pt.ddpercent) }}</td>
+                    <td>{{ pt.ddfree }}</td>
+                 </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+</p>
     </div>
 </div>
 {% endblock %}

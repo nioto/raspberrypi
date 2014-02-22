@@ -58,8 +58,7 @@ def get_ipv4_address(localhost=False):
         resp = [ip for ip in resp if not ip.startswith("127.0") ]
     return resp
 
-# check ip.startswith("127.") if necessary
-IPs = get_ipv4_address()
+IPs = get_ipv4_address(localhost=False)
 
 # release
 def getrelease():
@@ -91,20 +90,17 @@ def delta(time_from):
     h = tmp.seconds/3600
     min = (tmp.seconds - 3600 * h) / 60
     params=()
-    stformat = "{0} jour(s), {1} heures, {2} minutes, {3} secondes."
+    stformat = "{0} day(s), {1} hour(s), {2} minutes, {3} seconds."
     if tmp.days == 0:
         if h == 0:
-            stformat = "{0} minutes, {1} secondes."
+            stformat = "{0} minutes, {1} seconds."
             params = ( min, tmp.seconds % 60 )
         else:
-            stformat = "{0} heures, {1} minutes, {2} secondes."
+            stformat = "{0} hour(s), {1} minutes, {2} seconds."
             params = ( h, min, tmp.seconds % 60 )
     else :
-        stformat = "{0} jour(s), {1} heures, {2} minutes, {3} secondes."
+        stformat = "{0} day(s), {1} hour(s), {2} minutes, {3} seconds."
         params = ( tmp.days, h, min, tmp.seconds % 60 )
-
-    print stformat
-    print params
     return stformat.format( *params )
 
 
@@ -132,6 +128,7 @@ def home():
         tmp = psutil.disk_usage(p["mountpoint"])
         p["ddtotal"]=do_filesizeformat(tmp.total)
         p["ddpercent"]= 0.1 * int( 1000 * tmp.used / tmp.total )
+        p["ddfree"]=do_filesizeformat(tmp.free)
         disks.append( p )
     data['partitions']=disks
     # memory usage
@@ -139,3 +136,19 @@ def home():
     data['memtotal'] = do_filesizeformat( tmp[0] )
     data['mempercent'] = .1 * ( 1000 * tmp[1] / tmp[0] )
     return render_template('info.html', data = data)
+
+
+if __name__ == '__main__':
+    #global pisysinfo
+    from flask import Flask
+    app = Flask(__name__)
+    #, template_folder='pisysinfo/templates', static_folder='pisysinfo/static')
+    app.register_blueprint(pisysinfo)
+    app.config.update(
+        SECRET_KEY="098765432109876",
+        SESSION_COOKIE_NAME = "my_cookie"
+    )
+    @app.route('/', methods=['GET'])
+    def index():
+        return redirect( url_for('pisysinfo.home') )
+    app.run(host='0.0.0.0', port=3000, debug=True)
