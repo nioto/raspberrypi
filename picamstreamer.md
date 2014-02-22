@@ -23,6 +23,7 @@ Install dependancies
 ```bash
 $ sudo apt-get install python-picamera
 $ sudo apt-get install python-flask
+$ sudo apt-get install python-imaging
 ```
 
 Under [BSD license](https://raw.github.com/nioto/PiCamStreamer/master/LICENSE)
