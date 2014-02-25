@@ -15,7 +15,7 @@ Use [PureCSS](http://purecss.io/) for presentation
 2.  [python psutil](https://code.google.com/p/psutil/)
 
 
-Install dependancies
+####Install dependancies
 
 ```bash
 $ sudo apt-get install python-psutil
@@ -23,7 +23,7 @@ $ sudo apt-get install python-flask
 ```
 
 
-Screenshot :<br>
+#### Screenshot :
 <img src="img/pisysinfo.screen.png" alt="screenshot">
 
 
