@@ -9,10 +9,10 @@ Display a page that lists information about the computer ( hostname, ips, hard d
 
 Use [PureCSS](http://purecss.io/) for presentation
 
-Requirements:
+#### Requirements:
 
-1. [flask](http://flask.pocoo.org/)
-2. [python psutil](https://code.google.com/p/psutil/)
+1.  [flask](http://flask.pocoo.org/)
+2.  [python psutil](https://code.google.com/p/psutil/)
 
 
 Install dependancies
