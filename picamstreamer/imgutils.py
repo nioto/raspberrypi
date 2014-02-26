@@ -6,7 +6,8 @@ import io
 import time
 from datetime import datetime
 from StringIO import StringIO
-
+import threading
+from picamutils import capture
 
 # Load default font to draw time on stream
 try:
@@ -15,7 +16,6 @@ except IOError:
     FONT = ImageFont.load_default()
 
 __use_PiCamera= True
-
 try:
     import picamera.PiCamera as PiCamera
 except ImportError:
@@ -50,13 +50,10 @@ def get_image(config):
 
 def get_image_from_picam(config):
     """ Use PiCamera module to get an image """
-    with PiCamera() as cam:
-        image = io.BytesIO()
-        cam.resolution = config.resolution.values
-        cam.capture(image, 'jpeg', quality=config.quality)
-    image.seek(0)
-    Image.open(imgdata)
-    return image
+    data = io.BytesIO()
+    capture(image, config.resolution.values, quality=config.quality)
+    data.seek(0)
+    return Image.open(data)
 
 
 def get_image_from_webcam(config):
