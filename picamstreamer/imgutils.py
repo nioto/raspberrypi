@@ -17,7 +17,7 @@ except IOError:
 __use_PiCamera= True
 
 try:
-    import picamera.PiCamera as PiCamera
+    from picamera import PiCamera
 except ImportError:
     __use_PiCamera = False
 
@@ -55,8 +55,8 @@ def get_image_from_picam(config):
         cam.resolution = config.resolution.values
         cam.capture(image, 'jpeg', quality=config.quality)
     image.seek(0)
-    Image.open(imgdata)
-    return image
+    return Image.open(image)
+    #return image
 
 
 def get_image_from_webcam(config):
