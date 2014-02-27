@@ -46,7 +46,9 @@ class Config(object):
             self.showtime = True
         else:
             self.showtime = False
-#        session[CONFIG_KEY_SESSION]=self
+	    # session in Flask are store as cookie on client side, so 
+        # to update session data, we need to reset the value into the session
+        session[CONFIG_KEY_SESSION]=self
 
     def __str__(self):
         return "Config ( {0}, grayscale={1}, time={2}, quality={3})".format(str(self.resolution), str(self.grayscale), str(self.showtime), str(self.quality))
