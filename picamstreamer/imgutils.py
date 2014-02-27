@@ -39,8 +39,8 @@ def get_image(config):
     if image.mode != "RGB":
         image.convert("RGB")
     if config.showtime:
-        draw = ImageDraw.Draw(image)
-        draw.text((0, 0), datetime.today().strftime("%b %d %Y - %H.%M.%S"), fill=(255,255,255), font=FONT)
+        d = ImageDraw.Draw(image)
+        d.text((0, 0), datetime.today().strftime("%b %d %Y - %H.%M.%S"), fill=(255,255,255), font=FONT)
     if config.grayscale:
         image = ImageOps.grayscale(image)
     res = StringIO()
