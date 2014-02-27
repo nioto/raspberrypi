@@ -34,7 +34,7 @@ class Config(object):
         self.showtime = True
         self.quality = 70
 
-    def update(self, http_request):
+    def update(self, http_request,session):
         """ Update configuration from a POST request ."""
         index = int(http_request.values.get('resolution', 1))
         self.resolution = RESOLUTIONS[index-1]
@@ -46,6 +46,9 @@ class Config(object):
             self.showtime = True
         else:
             self.showtime = False
+	    # session in Flask are store as cookie on client side, so 
+        # to update session data, we need to reset the value into the session
+        session[CONFIG_KEY_SESSION]=self
 
     def __str__(self):
         return "Config ( {0}, grayscale={1}, time={2}, quality={3})".format(str(self.resolution), str(self.grayscale), str(self.showtime), str(self.quality))
@@ -57,14 +60,8 @@ class Config(object):
         self.quality = 70
 
     @staticmethod
-    def existes(session):
-        return CONFIG_KEY_SESSION in session
-
-    @staticmethod
     def get(session):
         if CONFIG_KEY_SESSION not in session:
-            session[CONFIG_KEY_SESSION] = CONFIG_DEFAULT
+            session[CONFIG_KEY_SESSION] = Config()
         return  session[CONFIG_KEY_SESSION]
 
-## Defaut configuration for simple streamer
-CONFIG_DEFAULT = Config()

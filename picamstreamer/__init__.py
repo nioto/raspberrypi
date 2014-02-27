@@ -18,7 +18,7 @@ def home():
     """ Render page displaying all controls"""
     config = Config.get(session)
     if request.method == "POST":
-        config.update(request)
+        config.update(request, session)
     return render_template('stream.html', resolutions=RESOLUTIONS, config=config)
 
 @streamer.route('/simple.html', methods=['GET'])
@@ -26,13 +26,10 @@ def show_simple_page():
     """ Display only the stream in lower resolution without any controls."""
     return render_template('simple.html', config=Config.get(session))
 
-
 @streamer.route('/stream.mjpg')
 def stream_cam():
-    boundary = uuid.uuid4().hex
-    config = Config.get(session)
 
-    def getimagestream():
+    def getstream(config):
         while True:
             tmp = StringIO()
             tmp.write('--%s\n' % boundary)
@@ -46,5 +43,7 @@ def stream_cam():
             tmp.close()
             img.close()
 
+    config = Config.get(session)
+    boundary = uuid.uuid4().hex
     headers = [('Content-Type', 'multipart/x-mixed-replace; boundary=--%s' % boundary)]
-    return Response(getimagestream(), headers=headers, direct_passthrough=True)
+    return Response(getstream(config), headers=headers, direct_passthrough=True)
