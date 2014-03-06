@@ -5,7 +5,7 @@ import psutil
 import os
 import time
 from datetime import timedelta, datetime
-
+import warnings
 
 pisysinfo = Blueprint('pisysinfo', __name__, template_folder='templates', static_folder='static')
 
@@ -58,6 +58,33 @@ def get_ipv4_address(localhost=False):
         resp = [ip for ip in resp if not ip.startswith("127.0") ]
     return resp
 
+def get_interfaces():
+    """
+    Returns Network interfaces as a list of a 3 elements array  [name, mac_address, ip]
+    """
+    re_ip = re.compile(r'inet\s*\w*\S*:\s*(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})')
+    l=[]
+    p = subprocess.Popen(["ifconfig"], stdout=subprocess.PIPE)
+    res = p.communicate() [0]
+    for s in res.split('\n'):
+        if len(s)>0:
+            # name
+            if not s[0].isspace():
+                #add a new interface
+                l.append([None,None,None])
+                l[-1][0]=s.split()[0]
+            #MAC address
+            if 'HWaddr' in s:
+                l[-1][1]=s[s.find('HWaddr ')+7:].strip()
+            #IP address
+            if 'inet addr:' in s:
+                resp = re_ip.findall(s)
+                l[-1][2]=resp[0]
+    return l
+
+
+IFACES = get_interfaces()
+
 IPs = get_ipv4_address(localhost=False)
 
 # release
@@ -73,6 +100,7 @@ def getrelease():
 
 RELEASE = getrelease()
 
+# Memory usage
 def get_memory_usage():
     """
     Returns the memory information of the host.
@@ -84,6 +112,41 @@ def get_memory_usage():
     resp = patt.findall(ifc_resp[0])
     l = [ int(v) for v in resp[0]]
     return l
+
+
+# From http://code.google.com/p/psutil/source/browse/psutil/_pslinux.py#142
+# cannot update to latest version of psutil
+def virtual_memory():
+    f = open('/proc/meminfo', 'rb')
+    TOTAL, FREE, BUFFERS, CACHED = "MemTotal:", "MemFree:", "Buffers:", "Cached:"
+    cached = buffers = free = total = None
+    try:
+        for line in f:
+            if line.startswith(TOTAL):
+                total = int(line.split()[1]) * 1024
+            elif line.startswith(FREE):
+                free = int(line.split()[1]) * 1024
+            elif line.startswith(BUFFERS):
+                buffers = int(line.split()[1]) * 1024
+            elif line.startswith(CACHED):
+                cached = int(line.split()[1]) * 1024
+            if (cached is not None
+                    and buffers is not None
+                    and free is not None
+                    and total is not None):
+                break
+        else:
+            # we might get here when dealing with exotic Linux flavors, see:
+            # http://code.google.com/p/psutil/issues/detail?id=313
+            msg = "'cached', 'active' and 'inactive' memory stats couldn't " \
+                  "be determined and were set to 0"
+            warnings.warn(msg, RuntimeWarning)
+            cached = buffers = free = total = 0
+    finally:
+        f.close()
+    avail = free + buffers + cached
+    used = total - free
+    return (total, used, avail)
 
 def delta(time_from):
     tmp = timedelta( seconds= time.time()-time_from )
@@ -115,6 +178,8 @@ def home():
     data['prog_up_since'] = delta(p.create_time)
     # Ips
     data['ips'] = IPs
+    # Interfaces
+    data['interfaces'] = IFACES
     # OS
     data['osname'] = RELEASE
     data['hostname'] = os.uname()[1]
@@ -132,7 +197,8 @@ def home():
         disks.append( p )
     data['partitions']=disks
     # memory usage
-    tmp =get_memory_usage()
+    #tmp =get_memory_usage()
+    tmp=virtual_memory()
     data['memtotal'] = do_filesizeformat( tmp[0] )
     data['mempercent'] = .1 * ( 1000 * tmp[1] / tmp[0] )
     return render_template('info.html', data = data)
