@@ -25,12 +25,12 @@
         <p>
             <strong>Hostname : </strong> {{ data.hostname }}
             <br>
-            <strong>IPs : </strong>
+            <strong>Interfaces : </strong>
+                {% for i in data.interfaces %}
             <blockquote>
-                {% for ip in data.ips %}
-                    {{ ip }}<br>
-                {% endfor %}
+                    {{ i[0] }} - {{ i[1] }} - {{ i[2] }}<br>
             </blockquote>
+                {% endfor %}
         </p>
     </div>
     <div class="pure-u">
